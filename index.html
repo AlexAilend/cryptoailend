@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="uk">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="CryptoAilend — інтерактивна лабораторія класичних шифрів та RSA">
+  <title>CryptoAilend — Криптографічна лабораторія</title>
+  <link rel="stylesheet" href="style.css">
+  <body>
+    <aside>
+      <a class="brand" href="#">
+        <span class="logo">C<span>∆</span>
+        </span>CryptoAilend<sup>LAB</sup>
+      </a>
+      <div class="nav-label">РОБОЧИЙ ПРОСТІР</div>
+      <nav>
+        <button data-mode="caesar" class="active">
+          <b>01</b> Шифр Цезаря <span>↗</span>
+        </button>
+        <button data-mode="vigenere">
+          <b>02</b> Квадрат Віженера <span>↗</span>
+        </button>
+        <button data-mode="polybius">
+          <b>03</b> Квадрат Полібія <span>↗</span>
+        </button>
+        <button data-mode="rsa">
+          <b>04</b> Алгоритм RSA <span>↗</span>
+        </button>
+      </nav>
+      <div class="side-note">
+        <span class="dot">
+        </span> Обчислення на вашому пристрої<p>Без сервера. Без передачі даних.<br>Прозорий кожний крок.</p>
+      </div>
+      <div class="author">КУРСОВИЙ ПРОЄКТ · 2026<strong>Хейленко Олексій</strong>Прикладна криптологія · Варіант 29</div>
+    </aside>
+    <main>
+      <header>
+        <span>ЛАБОРАТОРІЯ / <b id="crumb">КЛАСИЧНІ ШИФРИ</b>
+        </span>
+        <div>
+          <button id="theme" aria-label="Змінити тему">◐ Тема</button>
+          <button id="help">? Довідка</button>
+          <button id="checks">✓ Перевірка алгоритмів</button>
+        </div>
+      </header>
+      <section class="hero">
+        <div>
+          <div class="eyebrow">
+            <span class="dot">
+            </span> ДОСЛІДЖУЙ. ШИФРУЙ. ПЕРЕВІРЯЙ.</div>
+          <h1 id="title">Секрет починається<br>зі <em>зсуву.</em>
+          </h1>
+          <p id="subtitle">Одна ідея, що змінила історію таємного листування.<br>Побачте математику за кожною літерою.</p>
+        </div>
+        <div class="orbit" aria-hidden="true">
+          <div class="orbit-inner">А<span>→</span>Г</div>
+          <small>МАТЕМАТИКА ТАЄМНИЦЬ</small>
+        </div>
+      </section>
+      <div class="workspace">
+        <section class="panel input-panel">
+          <div class="section-top">
+            <h2>Параметри експерименту</h2>
+            <span class="pill" id="tag">ROT / 33</span>
+          </div>
+          <div class="segmented">
+            <button id="enc" class="selected">Шифрування</button>
+            <button id="dec">Розшифрування</button>
+          </div>
+          <div id="text-controls">
+            <label for="message">Вхідний текст <button id="example" class="text-button">↺ Моє ПІБ</button>
+            </label>
+            <textarea id="message" rows="3" spellcheck="false">ХЕЙЛЕНКО ОЛЕКСІЙ ОЛЕКСАНДРОВИЧ</textarea>
+            <div class="input-meta">Українська абетка · 33 літери <span id="count">
+              </span>
+            </div>
+            <div id="shift-wrap">
+              <label for="shift">Зсув алфавіту <output id="shift-value">3</output>
+              </label>
+              <input type="range" id="shift" min="0" max="32" value="3">
+            </div>
+            <div id="key-wrap" hidden>
+              <label for="key">Ключове слово</label>
+              <input id="key" value="КРИПТО">
+              <p class="hint">ROT2 додає 2 до індексу ключа. Пробіли не просувають ключ.</p>
+            </div>
+          </div>
+          <div id="rsa-controls" hidden>
+            <div class="triple">
+              <div>
+                <label for="p">Просте p</label>
+                <input id="p" value="154799" inputmode="numeric">
+              </div>
+              <div>
+                <label for="q">Просте q</label>
+                <input id="q" value="1093" inputmode="numeric">
+              </div>
+              <div>
+                <label for="d">Закритий d</label>
+                <input id="d" value="22305175" inputmode="numeric">
+              </div>
+            </div>
+            <label for="number">Число <button id="rsa-example" class="text-button">↺ З умови</button>
+            </label>
+            <input id="number" value="2897878135" inputmode="numeric">
+            <p class="hint">M ≥ N: десяткові блоки фіксованої ширини len(N) − 1. Для розшифрування блоків — пробіли між числами.</p>
+          </div>
+          <div id="rsa-packet-tools" class="packet-tools" hidden>
+            <button id="export-rsa">↓ RSA-пакет JSON</button>
+            <button id="import-rsa">↑ Відкрити RSA-пакет</button>
+            <input id="rsa-file" type="file" accept=".json,application/json" hidden>
+          </div>
+          <button id="run" class="primary">Виконати шифрування <span>→</span>
+          </button>
+          <p id="error" role="alert">
+          </p>
+          <div class="result-head">
+            <label>РЕЗУЛЬТАТ</label>
+            <button id="copy" class="text-button">Копіювати</button>
+          </div>
+          <output id="result" class="result">
+          </output>
+          <div id="verification" class="verification">
+          </div>
+          <button id="reuse" class="reuse-button">↶ Взяти результат як вхід</button>
+        </section>
+        <section class="panel visual-panel">
+          <div class="section-top">
+            <h2 id="visual-title">Анатомія перетворення</h2>
+            <span class="live">
+              <span class="dot">
+              </span> LIVE</span>
+          </div>
+          <div id="visual">
+          </div>
+          <div class="formula" id="formula">
+          </div>
+          <div class="step-head">
+            <h3>Кожний крок має значення</h3>
+            <div>
+              <button id="prev" aria-label="Попередній крок">←</button>
+              <span id="position">
+              </span>
+              <button id="next" aria-label="Наступний крок">→</button>
+            </div>
+          </div>
+          <div id="step-card">
+          </div>
+          <button id="explain" class="text-button">Пояснити цей крок</button>
+          <p id="explanation" class="explanation" hidden>
+          </p>
+          <div id="tokens" class="tokens">
+          </div>
+        </section>
+      </div>
+      <section class="panel trace-panel">
+        <div class="section-top">
+          <div>
+            <div class="eyebrow">ВІДТВОРЮВАНИЙ РЕЗУЛЬТАТ</div>
+            <h2>Протокол експерименту</h2>
+          </div>
+          <div>
+            <button id="export">↓ Експорт TXT</button>
+            <button id="print">Друк / PDF</button>
+          </div>
+        </div>
+        <details>
+          <summary>Відкрити повну таблицю обчислень</summary>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Крок</th>
+                  <th>Вхід</th>
+                  <th>Параметр / обчислення</th>
+                  <th>Вихід</th>
+                </tr>
+              </thead>
+              <tbody id="trace">
+              </tbody>
+            </table>
+          </div>
+        </details>
+      </section>
+      <footer>
+        <span>CryptoAilend <b>1.1</b> · Створено, щоб розуміти.</span>
+        <span>Навчальна реалізація · Не для захисту реальних секретів</span>
+      </footer>
+    </main>
+    <dialog id="dialog">
+      <button id="close" class="close">✕</button>
+      <div class="eyebrow">CRYPTOAILEND / МЕТОДИКА</div>
+      <h2>Математика без чорної скриньки</h2>
+      <p>Нумерація української абетки: від 0 до 32, з Ґ, Є, І та Ї. Класичні шифри переводять текст у верхній регістр.</p>
+      <h3>Цезар</h3>
+      <p>c = (x + k) mod 33. При розшифруванні зсув віднімається. Типове k = 3 — обраний параметр, не вимога викладача.</p>
+      <h3>Віженер ROT2</h3>
+      <p>Визначення цієї реалізації: T[r,c] = A[(r + c + 2) mod 33]. Рядок задає літера ключа, стовпець — літера тексту. Ключ КРИПТО обрано для демонстрації, в умові ключ не заданий.</p>
+      <h3>Полібій</h3>
+      <p>Квадрат 6 × 6 заповнюється українською абеткою по рядках; останні три клітинки порожні. Координата: рядок, потім стовпець. / позначає пробіл.</p>
+      <h3>RSA</h3>
+      <p>N = pq; φ(N) = (p−1)(q−1); ed ≡ 1 mod φ(N). C = Mᵉ mod N; M = Cᵈ mod N. Використано точну арифметику BigInt.</p>
+      <p>Блоки M: ширина len(N)−1; для варіанта 29 це 8 цифр: 28978781 | 35. У програмі зберігаються довжини для зворотної перевірки. При ручному розшифруванні кожен блок виводиться окремо: довжину початкових блоків треба знати для відновлення початкових нулів.</p>
+      <p>Це навчальний RSA без padding. Сталі малі ключі та класичні шифри непридатні для реального захисту даних.</p>
+      <p>Кнопка «Взяти результат як вхід» перемикає напрям і зберігає довжини RSA-блоків. Експорт RSA-пакета JSON зберігає шифротекст, модуль N та довжини. Пакет можна відкрити в новому сеансі після введення відповідного закритого ключа.</p>
+    </dialog>
+    <dialog id="checks-dialog">
+      <button id="close-checks" class="close" aria-label="Закрити перевірки">✕</button>
+      <div class="eyebrow">CRYPTOAILEND / КОНТРОЛЬНІ ПРИКЛАДИ</div>
+      <h2>Перевірка алгоритмів</h2>
+      <p id="checks-summary">
+      </p>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Приклад</th>
+              <th>Очікуємо</th>
+              <th>Отримано</th>
+            </tr>
+          </thead>
+          <tbody id="checks-results">
+          </tbody>
+        </table>
+      </div>
+      <p>Контрольні приклади перевіряють реалізацію. Вони не доводять криптографічну стійкість.</p>
+    </dialog>
+    <script src="js/config.js">
+    </script>
+    <script src="js/validation.js">
+    </script>
+    <script src="js/algorithms/caesar.js">
+    </script>
+    <script src="js/algorithms/vigenere.js">
+    </script>
+    <script src="js/algorithms/polybius.js">
+    </script>
+    <script src="js/algorithms/rsa.js">
+    </script>
+    <script src="js/checks.js">
+    </script>
+    <script src="js/ui/visuals.js">
+    </script>
+    <script src="js/ui/export.js">
+    </script>
+    <script src="js/ui/app.js">
+    </script>
+  </body>
+</html>
